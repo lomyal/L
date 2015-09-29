@@ -70,16 +70,18 @@ public:
 
         vector<vector<char>> container(nRows);
 
-        int groupLen = nRows == 2 ? 2 : 2 * nRows - 2;  // 注意两行的情况
+        // int groupLen = nRows == 2 ? 2 : 2 * nRows - 2;  // 注意两行的情况
+        int groupLen = 2 * (nRows - 1);  // 两行的情况并不特殊
         for (int i = 0; i < len; i++) {
             int pos = i % groupLen;
-            int row = pos < nRows ? pos : nRows - (pos - nRows) - 2;
+            // int row = pos < nRows ? pos : nRows - (pos - nRows) - 2;
+            int row = pos < nRows ? pos : groupLen - pos;  // 更简洁的写法
 
             container[row].push_back(s[i]);
         }
 
-        for (int i = 0, j = 0; i < nRows; i++) {
-            int iLen =(int)container[i].size();
+        for (int i = 0, j = 0; i < nRows; i++) {  // i 指向行，j 指向结果result的下一个空位
+            int iLen = (int)container[i].size();
             for (int k = 0; k < iLen; j++, k++) {
                 result[j] = container[i][k];
             }
@@ -104,9 +106,9 @@ string convert(string s, int nRows) {
     {
         str[row].push_back(s[i]);
 
-        if (row == 0)
+        if (row == 0)  // 上转折点
             step = 1;
-        else if (row == nRows - 1)
+        else if (row == nRows - 1)  // 下转折点
             step = -1;
 
         row += step;
